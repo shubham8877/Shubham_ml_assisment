@@ -17,7 +17,8 @@ from dataclasses import dataclass, field
 from typing import Optional
 from enum import Enum
 
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_groq import ChatGroq
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain.schema import Document
@@ -98,7 +99,7 @@ class RetrieverAgent:
 
     def __init__(self, persist_dir: str = "./chroma_db"):
         self.persist_dir = persist_dir
-        self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+        self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         self.vectorstore = None
 
     def index(self, chunks: list[Document]) -> None:
@@ -138,8 +139,8 @@ class SummarizerAgent:
     Focus on: technical specifications, metrics, key findings, and action items.
     Be concise but complete. Do not add information not present in the chunk."""
 
-    def __init__(self, model: str = "gpt-4o-mini", batch_size: int = 5):
-        self.llm = ChatOpenAI(model=model, temperature=0)
+    def __init__(self, model: str = "llama-3.1-8b-instant", batch_size: int = 5):
+        self.llm = ChatGroq(model=model, temperature=0)
         self.batch_size = batch_size
 
     def _summarize_chunk(self, chunk: Document) -> str:

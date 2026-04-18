@@ -11,7 +11,7 @@ and factual consistency.
 import logging
 from typing import Optional
 from rouge_score import rouge_scorer
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ def compute_g_eval(
     """
     import json
 
-    llm = ChatOpenAI(model=model, temperature=0)
+    llm = llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
 
     prompt = G_EVAL_PROMPT.format(
         source=source_text[:2000],
