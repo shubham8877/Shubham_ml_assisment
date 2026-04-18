@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  anomaly-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: anomaly_detection_api
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_DIR=/app/models
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
